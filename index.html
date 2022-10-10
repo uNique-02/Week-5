@@ -1,0 +1,303 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<link rel="stylesheet" type="text/css" href="../style.css" />
+		<link rel="stylesheet" type="text/css" href="../print.css" media="print" />
+		<script type="text/javascript" src="../labs.js"></script>
+		
+		<style type="text/css">
+			#netterms {
+				line-height: 2em;
+			}
+			
+			#netterms li {
+				display: inline;
+				padding: 0.2em 0.5em;
+				border-left: thin dotted gray;
+				border-right: thin dotted gray;
+			}
+			
+			.sectionheader {
+				margin-top: 14em;
+			}
+		</style>
+
+		<style type="text/css" media="print">
+			h2 {
+				margin-top: 1em !important;
+				padding-top: 0em !important;
+			}
+		</style>
+
+		<title>CMSC 121 Internet Technologies Activity 4 (PHP)</title>
+	</head>
+
+	<body>
+		<h1>
+			CMSC 121 Internet Technologies <br />
+			Activity 4: PHP
+		</h1>
+		<h1>
+			From: <br />
+			Web Programming Step by Step <br />
+			Lab 3: PHP
+		</h1>
+
+		<p class="credit">
+			lab idea and code by Brian Le; revised by John Ultra
+		</p>
+
+		<p class="credit">
+		<b>Credits and Acknowledgements </b> This laboratory activity was taken from Companion Website for <cite>Web Programming
+		Step by Step</cite> by Marty Stepp, Jessica Miller, and Victoria Kirst. These materials are used in this
+		course for educational purposes only. If you are keen, the complete list of materials can be found in the following
+		URL: <a href="https://www.webstepbook.com/">https://www.webstepbook.com/</a>. The copyright to these materials
+		are owned by their respective owners. 
+		</p>
+		<p>
+			The purpose of this lab is to practice using PHP to create dynamic pages.
+		</p>
+
+
+		<h2>Activity 4 Resources</h2>
+
+		<ul>
+			<li>
+				<a class="popup" href="http://www.webstepbook.com/supplements.shtml#slides">Lecture Slides</a>
+			</li>
+
+			<li>
+				
+						Use the <b> Developer Tools </b> that are built-in in modern web browsers to debug your work. For more info, visit the following links:
+						<a href="https://developers.google.com/web/tools/chrome-devtools"> Google Chrome</a>, and
+						<a href="https://developer.mozilla.org/en-US/docs/Tools">Mozilla Firefox</a>.
+				
+			</li>
+			
+			<li>
+				<a href="https://www.webstepbook.com/supplements/labsection/lab3-music/solution/music_ex4.php">Solution</a> to this lab, so you can see how your page is supposed to look and work
+			</li>
+			<li>
+				<b>Note</b>: This exercise uses PHP. Make sure to place your code under the Root Directory (i.e., under "activity4" folder) of your Web Server and access it via the web browser to run your PHP scripts. Opening PHP files directly 
+				on the browser will not work, unlike HTML pages. 
+			</li>
+		</ul>
+
+
+		<h2>MP3 Music Library</h2>
+
+		<p>
+			Brian has written a page named <a href="music.html"><code>music.html</code></a> (right-click and select <q>Save Link Target As...</q>) that contains a display of all the MP3s he has on his computer.  He has already written the HTML code and the styles for the page, <code>viewer.css</code>.  (You don't need to do any CSS for this lab.)
+		</p>
+		
+		
+		<div class="expectedoutput">
+			<img src="images/output.png" alt="output" />
+		</div>
+			
+		<p>
+			However, the page is not very flexible, because he must manually edit it every time he adds songs to his collection.  In this lab, you are to turn this page into a dynamic PHP page in a file named <code>music.php</code> that will list the MP3s and will always display the songs currently on the computer.
+		</p>
+		
+		
+		<h2>Exercises for Today:</h2>
+		
+		<ol>
+			<li><a href="#ex1">Display MP3 Files</a></li>
+			<li><a href="#ex2">Display Playlists</a></li>
+			<li><a href="#ex3">View Songs in a Playlist</a></li>
+			<li><a href="#ex4">Extra Song Info</a></li>
+			<li><a href="#ex5">Shuffle Song Order</a></li>
+		</ol>
+
+
+		<h2 id="ex1">Exercise 1: Display MP3 Files (roughly 20 minutes)</h2>
+		
+		<p>
+			The first task is to convert <code>music.html</code> into a PHP page that displays Brian's MP3s.  Examine the files in the <code>songs/</code> folder and display each <code>.mp3</code> file in the format currently shown in the <code>music.html</code> page.  Each one becomes a list item (<code>li</code>) with a <code>class</code> of <code>mp3item</code>.  Each song's title should be a link to download that song file from the computer.
+		</p>
+		
+		<p>
+			Your page should look like this:
+		</p>
+		
+
+		<div class="expectedoutput">
+			<img src="images/output1.png" alt="expected output" />
+		</div>
+		
+		<p>
+			It may help you to remember that the <a href="http://www.php.net/glob"><code>glob</code></a> and <a href="http://www.php.net/scandir"><code>scandir</code></a> functions list files in a directory, and that the <a href="http://www.php.net/basename"><code>basename</code></a> function extracts the file name from a larger path string.
+		</p>
+		
+		<p>
+			You may want to download this list of MP3s and playlist files for testing:
+		</p>
+		
+		<ul>
+			<li>
+				<a href="songs.zip">
+					<img class="icon" src="../../images/icon_zip.gif" alt="icon" />
+					songs.zip
+				</a>
+			</li>
+		</ul>
+		
+	
+		<h2 id="ex2">Exercise 2: Display Playlists (roughly 10 minutes)</h2>
+ 
+		<p>
+			Brian's music collection also includes <em>playlists</em>, which are text files containing lists of his favorite songs.  For this exercise, modify your PHP code to display any playlist files, which are <code>.txt</code> files in the <code>songs/</code> directory.  They should display very similarly to the <code>.mp3</code> files, except they use a <code>class</code> of <code>playlistitem</code> so that they have a different icon.  For now, a playlist's link is the same as an MP3's link: It downloads the file.
+		</p>
+		
+		<p>
+			Your page should look like this:
+		</p>
+
+		<div class="expectedoutput">
+			<img src="images/output2.png" alt="expected output" />
+		</div>
+		
+		
+		
+		<h2 id="ex3">Exercise 3: View Songs in a Playlist (roughly 15 minutes)</h2>
+ 
+		<p>
+			Next you should modify the behavior of your page so that it can optionally display just the songs that are listed in a certain playlist.  A playlist is just a text file, where each line of the file contains the file name of an MP3 that is part of the playlist.  For example, the file <code>songs/mypicks.txt</code> has the following contents:
+		</p>
+		
+		<pre>
+Be More.mp3
+Just Because.mp3
+Drift Away.mp3
+</pre>
+		
+		<p>
+			For this exercise, change your PHP code so that if your page is given a <em>query parameter</em> of <code>playlist</code>, it will read the playlist text file with the given name and display its songs only.  For example, if your page is displayed with the following URL:
+		</p>
+		
+		<pre>
+music.php<strong>?playlist=mypicks.txt</strong>
+</pre>
+
+		<p>
+			Then your page should look like this:
+		</p>
+
+		<div class="expectedoutput">
+			<img src="images/output3.png" alt="expected output" />
+		</div>
+		
+		<p>
+			You may assume that any songs contained in a playlist actually do exist on the computer.
+		</p>
+		
+		<p>
+			Recall that query parameters are put into a global PHP array named <code>$_REQUEST</code>.  To access the above query parameter, you should write a line of code such as the following:
+		</p>
+		
+		<pre>
+$playlist = $_REQUEST[&quot;playlist&quot;];
+</pre>
+		
+		<p>
+			If no query parameter is given, your page should use its previous behavior, displaying all <code>.mp3</code> and <code>.txt</code> files.  You can test whether a particular parameter has been passed by calling PHP's <a href="http://www.php.net/isset"><code>isset</code></a> function.
+		</p>
+		
+		
+		<h2 id="ex4">Exercise 4: Song Size Info (roughly 10 minutes)</h2>
+ 
+		<p>
+			If you have time, add some information to the end of each song shown on the page.  Display the song's size in the appropriate unit.  If the song is 0 to 1023 bytes in size, display it as bytes.  If it is 1024 to 1048575 bytes in size, display it as kilobytes (multiples of 1024 bytes).  If it is 1048576 or more bytes, display it as megabytes (multiples of 1048576 bytes).
+		</p>
+		
+		<p>
+			If displaying kb or mb, you should round your value to the nearest hundredth.  You may want to review the documentation for the <a href="http://www.php.net/round"><code>round</code></a> function.
+		</p>
+		
+		<p>
+			Your page should look like this:
+		</p>
+
+		<div class="expectedoutput">
+			<img src="images/output4.png" alt="expected output" />
+		</div>
+		
+		
+		<h2 id="ex5">Exercise 5 (for 1337 h4x0rz only): Extra Features</h2>
+
+		<p>
+			If you finish all of the above exercises, you can try adding any of the following optional extra features to your page:
+		</p>
+		
+		<ul>
+			<li>
+				<strong>Back link:</strong> When the user is viewing a playlist, it would be nice to have a link that goes back to the main overall page to display all songs again.  Add such a link to the top of your page.
+			</li>
+		
+			<li>
+				<strong>Support real <code>.m3u</code> playlists:</strong> The actual playlist format used by MP3 player software, <code>.m3u</code>, is actually just a text file like our text playlists were.  The only difference is that in a <code>.m3u</code> file it is legal to have comment lines that begin with a <code>#</code> character.  For example, here are the contents of a file <code>mypicks.m3u</code> that is equivalent to <code>mypicks.txt</code> shown previously:
+				
+				<pre>
+<strong>#EXTM3U</strong>
+<strong>#EXTINF:177,Paul Dateh & Oren Yoel - Be More</strong>
+Be More.mp3
+<strong>#EXTINF:291,Christopher Toy - Just Because</strong>
+Just Because.mp3
+<strong>#EXTINF:238,Magnetic North - Drift Away</strong>
+Drift Away.mp3
+</pre>
+				
+				<p>
+					Modify your page so that it lists playlists as <code>.m3u</code> files instead of <code>.txt</code> files.  When your page is reading such a file, you'll need to skip over any comment lines to show just the songs in the list.  You may want to review the string functions from the book or slides to see how to search a string for a given substring.
+				</p>
+			</li>
+		
+			<li>
+				<strong>Shuffle:</strong> Add another optional query parameter to your page named <code>shuffle</code>.  When <code>shuffle</code> is set to <code>on</code>, you should display the songs in a random ordering rather than in their default sorted order.  For example, if the page were requested in the following way:
+				
+				<pre>
+music.php<strong>?shuffle=on</strong>
+</pre>
+
+				<p>
+					Then the songs would display in a random order.  You may want to review the array functions from the book or slides to see how to rearrange an array's elements.
+				</p>
+			</li>
+			
+			<li>
+				<strong>Sort by Size:</strong> Add another optional query parameter to your page named <code>bysize</code>.  When <code>bysize</code> is set to <code>on</code>, you should display the songs sorted from largest to smallest size rather than in their default sorted order.  For example, if the page were requested in the following way:
+
+				<pre>
+music.php<strong>?bysize=on</strong>
+</pre>
+
+				<p>
+					Then your page should display the largest songs (such as <code>Drift Away.mp3</code>) first and smallest songs (such as <code>190M Rap.mp3</code>) last.
+				</p>
+		
+				<p>
+					The appearance is unspecified when both <code>shuffle</code> and <code>bysize</code> are set to <code>on</code>.
+				</p>
+			</li>
+		
+		<div class="w3c">
+			<a href="http://validator.w3.org/check/referer"><img src="../w3c-xhtml11.png" alt="Valid XHTML 1.1" /></a>
+			<a href="http://jigsaw.w3.org/css-validator/check/referer"><img src="../w3c-css.png" alt="Valid CSS!" /></a>
+		</div>
+
+		<!-- Google Analytics -->
+		<script type="text/javascript">
+			var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+			document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+
+		<script type="text/javascript">
+			var pageTracker = _gat._getTracker("UA-2729135-5");
+			pageTracker._initData();
+			pageTracker._trackPageview();
+		</script>
+	</body>
+</html>
+
