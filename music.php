@@ -10,17 +10,10 @@
     <?php
 		class parent_class{
             var $song_array = array();
+            var $size_array = array();
             var $count=0;
 
-            function printarray(){
-                echo "KIM CUTE";
-                for($i=0; $i<3; $i++){ ?>
-                    <li class="mp3item">
-                    <?php echo $this->song_array[$i]; ?>
-                    </li>
-                <?php }
-            }
-
+            //retreives the file size of a file name
             function file_size($filename){
                     $size=filesize($filename);
                 if( $size>1023 && $size<1048575){
@@ -38,23 +31,44 @@
                 return $size;
                 }
 
-            function displaysong(){
-                 $songs = glob('songs/*.mp3');
+
+            //display the songs
+            function displaysong($caller){
+                $songs = glob('songs/*.mp3');
                 foreach ($songs as $song){ 
                 $size =  $this->file_size($song) ?>
-                    <li class="mp3item">
-					    <a href="<?php echo $song; ?>"> <?php echo basename($song); echo $size;
-                        $this->song_array[$this->count++]=basename($song);
-                        ?></a>
-				    </li>
-                <?php } 
+                <?php
+                    $this->song_array[$this->count]=basename($song);
+                    $this->size_array[$this->count++]=$size;
+                } ?>
+                <?php
+                switch($caller){ 
+                    case 0: 
+                        for($i=0; $i<$this->count; $i++){ ?>
+                        <li class="mp3item">
+                            <a href="songs/<?php echo $this->song_array[$i]; ?>"> <?php echo $this->song_array[$i]; echo $this->size_array[$i]; ?>
+                        </li>
+                        <?php }
+                        break;
+                    case 1:
+                        $shuffled = $this->song_array;
+                        shuffle($shuffled);
+                        for($i=0; $i<$this->count; $i++){ ?>
+                            <li class="mp3item">
+                                <a href="songs/<?php echo $shuffled[$i]; ?>"> <?php echo $shuffled[$i]; echo $this->size_array[$i]; ?>
+                            </li>
+                            <?php }
+                        break;
+                }?>
+            <?php
             } 
 
+            //display the 
              function display_playlists(){
                     $playlists = glob('songs/*.txt');
                     foreach ($playlists as $file){ ?>
                         <li class="playlistitem">
-                            <a href="music.php?playlist=<?php echo basename($file); ?>"> <?php echo pathinfo(basename($file))['filename'].".m3u" ; echo $this->file_size($file);?></a>
+                            <a href="music.php?playlist=<?php echo basename($file); ?>"> <?php echo pathinfo(basename($file))['filename'].".m3u" ;?></a>
                         </li>
                  <?php } 
              }
@@ -66,9 +80,8 @@
                 </li>
 
             
-             <?php }
-            
-    } ?>
+             <?php } 
+             } ?>
 
 	<body>
         
@@ -81,53 +94,54 @@
 		
 		<div id="listarea">
         
+        <!-- Back function-->
         <?php function backlink(){ ?>
                 <a href="music.php">Back</a>
             <?php } ?>
 
         <?php $song = NULL?>
+        
+        <!-- Form -->
             <form method="$_REQUEST" >
                 <ul id="musiclist" name="playlist">                   
                 <?php
+                //creates instance
                 $song = new parent_class();
                 $shuffle=NULL;
                 $sort_bysize=NULL;
-
+                
+                //IF there is a request or when a song/playlist is clicked 
                 if(!empty($_REQUEST["playlist"])){
                     $playlist = $_REQUEST["playlist"];
                     $path = pathinfo($playlist, PATHINFO_EXTENSION);
                 }
                 
-                if(empty($playlist)){
-                    $song->displaysong();
-                    $song->display_playlists();
-                } 
-                else if(!empty($playlist) && $path == "txt"){
+                //If the request is a playlist
+                if(!empty($playlist) && $path == "txt"){
                     $list = $playlist;
+                    //stores the songs in the playlist
                     $content = file("songs/$list");
                     backlink();
+                    //display the individual songs
                         foreach($content as $indiv_song){
                             $song->display_indivsong(trim($indiv_song));
                         } 
                 }
-                if(!empty($_REQUEST["shuffle"])){
+                //IF shuffle is on, this function suffles the songs
+                else if(!empty($_REQUEST["shuffle"])){
                     $shuffle = $_REQUEST["shuffle"];
+                    if($shuffle=="on"){
+                        $song->displaysong(1);
+                        $song->display_playlists();
+                    }
+                    
                 }
-                if(!empty($_REQUEST["bysize"])){
-                    $sort_bysize = $_REQUEST["bysize"];
-                }
-                
-                if($shuffle=="on"){
-                    echo $song->printarray();
+                //IF there is no shuffle orno playlistis clcked
+                else if(empty($playlist) && empty($shuffle)){
+                    $song->displaysong(0);
+                    $song->display_playlists();
                 } 
-                else{
-
-                }
-                if($sort_bysize=="on"){
-
-                }else{
-
-                }
+            
                 ?>
                 </ul>
             </form>    
